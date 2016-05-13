@@ -1,0 +1,15 @@
+//
+// Created by LiMengyu on 16/5/13.
+//
+
+#ifndef IMAGEBLURDETECTION_JSONPARSER_H
+#define IMAGEBLURDETECTION_JSONPARSER_H
+
+
+class JSONParser
+{
+
+};
+
+
+#endif //IMAGEBLURDETECTION_JSONPARSER_H
