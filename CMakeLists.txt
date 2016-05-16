@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(ImageBlurDetection)
 
-message(STATUS "start running cmake...")
-
 find_package(Boost 1.60.0 COMPONENTS system filesystem REQUIRED)
 
 if(Boost_FOUND)
