@@ -19,7 +19,24 @@ void ImageWriter::WriteImageLocal(const char *path, string imageDataString)
     }
 
     // 3. 最后将char数组输出保存为图片文件
-    fwrite(imgCharArray, sizeof(char), size, ofile);
+    fwrite(imgCharArray, sizeof(char), (size_t) size, ofile);
 
     fclose(ofile); // 关闭文件
 }
+
+void ImageWriter::WriteImageLocal(string path, string imageDataString)
+{
+    long size = path.length();
+
+    // 2. 再将string类型转换为char数组
+    char *pathCharArray = new char[size];
+    for (int i = 0; i <= size; i++)
+    {
+        pathCharArray[i] = path[i];
+    }
+
+    WriteImageLocal(pathCharArray,imageDataString);
+}
+
+
+

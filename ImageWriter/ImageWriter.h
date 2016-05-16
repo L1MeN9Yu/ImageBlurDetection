@@ -12,7 +12,9 @@ using namespace std;
 
 class ImageWriter
 {
+public:
     static void WriteImageLocal(const char *path, string imageDataString);
+    static void WriteImageLocal(string path, string imageDataString);
 };
 
 
