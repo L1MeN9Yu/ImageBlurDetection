@@ -20,11 +20,11 @@ set(SOURCE_FILES main.cpp NetworkService/NetworkService.cpp NetworkService/Netwo
 add_executable(ImageBlurDetection ${SOURCE_FILES})
 if(Boost_FOUND)
 
-    target_link_libraries(ImageBlurDetection -lm ${Boost_LIBRARIES})
+    target_link_libraries(ImageBlurDetection -lpthread ${Boost_LIBRARIES})
 
 endif()
 
 FIND_PACKAGE(OpenCV REQUIRED)
 if(OpenCV_FOUND)
-    target_link_libraries(ImageBlurDetection -lm ${OpenCV_LIBS})
+    target_link_libraries(ImageBlurDetection -lpthread ${OpenCV_LIBS})
 endif()
