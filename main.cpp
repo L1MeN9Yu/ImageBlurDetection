@@ -70,7 +70,6 @@ void imageBlurDetection()
             {
                 for (boost::filesystem::directory_entry &x : boost::filesystem::directory_iterator(path))
                 {
-//                    cout << "    " << x.path() << '\n' << endl;
                     string imagePathString = x.path().string();
                     cv::Mat cvImage = cv::imread(imagePathString);
 
@@ -116,13 +115,13 @@ int main()
     cout << "avInfoURL = " << avInfoURL << endl;
     string response = NetworkService::GetRequest(avInfoURL);
 
-    std::stringstream ss;
+    std::stringstream stringstream;
     // send your JSON above to the parser below, but populate ss first
 
-    ss.str(response);
+    stringstream.str(response);
 
     boost::property_tree::ptree pt;
-    boost::property_tree::read_json(ss, pt);
+    boost::property_tree::read_json(stringstream, pt);
 
     print(pt);
     imageBlurDetection();
