@@ -20,7 +20,7 @@ set(SOURCE_FILES main.cpp NetworkService/NetworkService.cpp NetworkService/Netwo
 add_executable(ImageBlurDetection ${SOURCE_FILES})
 if(Boost_FOUND)
 
-    target_link_libraries(ImageBlurDetection ${Boost_LIBRARIES})
+    target_link_libraries(ImageBlurDetection -lm ${Boost_LIBRARIES})
 
 endif()
 
