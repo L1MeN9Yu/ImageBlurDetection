@@ -26,5 +26,5 @@ endif()
 
 FIND_PACKAGE(OpenCV REQUIRED)
 if(OpenCV_FOUND)
-    target_link_libraries(ImageBlurDetection ${OpenCV_LIBS})
+    target_link_libraries(ImageBlurDetection -lm ${OpenCV_LIBS})
 endif()
