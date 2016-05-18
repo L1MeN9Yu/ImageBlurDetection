@@ -19,12 +19,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 set(SOURCE_FILES main.cpp NetworkService/NetworkService.cpp NetworkService/NetworkService.h JSONParser/JSONParser.cpp JSONParser/JSONParser.h ImageWriter/ImageWriter.cpp ImageWriter/ImageWriter.h)
 add_executable(ImageBlurDetection ${SOURCE_FILES})
 if(Boost_FOUND)
-
-    target_link_libraries(ImageBlurDetection -lpthread ${Boost_LIBRARIES})
+    # linux下编译需要加-lpthread
+    target_link_libraries(ImageBlurDetection -lpthread -lboost_regex-mt ${Boost_LIBRARIES})
 
 endif()
 
 FIND_PACKAGE(OpenCV REQUIRED)
 if(OpenCV_FOUND)
+    # linux下编译需要加-lpthread
     target_link_libraries(ImageBlurDetection -lpthread ${OpenCV_LIBS})
 endif()
