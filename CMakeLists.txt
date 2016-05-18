@@ -20,7 +20,7 @@ set(SOURCE_FILES main.cpp NetworkService/NetworkService.cpp NetworkService/Netwo
 add_executable(ImageBlurDetection ${SOURCE_FILES})
 if(Boost_FOUND)
     # linux下编译需要加-lpthread
-    target_link_libraries(ImageBlurDetection -lpthread -lboost_regex-mt ${Boost_LIBRARIES})
+    target_link_libraries(ImageBlurDetection -lpthread -lboost_regex ${Boost_LIBRARIES})
 
 endif()
 
