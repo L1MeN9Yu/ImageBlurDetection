@@ -12,6 +12,9 @@
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 #include <boost/uuid/uuid_io.hpp>
+#include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/date_time/local_time_adjustor.hpp>
+#include <boost/date_time/c_local_time_adjustor.hpp>
 
 using namespace std;
 using namespace boost::asio;
@@ -20,12 +23,13 @@ using namespace boost::asio;
 static string const urlRegexString = "^(?:http://)?([^/]+)(?:/?.*/?)/(.*)$";
 static string const avInfo = "?avinfo";
 static string const frameInfo = "?vframe/jpg/offset/";
-//static string const tempDirectory = "./temp/";
 
-string a;
+string videoURLString;
 
 void imageBlurDetection(string &tempDirectory)
 {
+    boost::property_tree::ptree array;
+
     boost::filesystem::path path(tempDirectory);
     try
     {
@@ -59,6 +63,11 @@ void imageBlurDetection(string &tempDirectory)
                             double focusMeasure = sigma.val[0] * sigma.val[0];
 
                             printf(" %s ------------ %lf \n", x.path().string().c_str(), focusMeasure);
+
+                            boost::property_tree::ptree vframeInfo;
+                            vframeInfo.put("vframe", x.path().stem());
+                            vframeInfo.put("value", std::to_string(focusMeasure));
+                            array.push_back(std::make_pair("", vframeInfo));
                         }
                     }
                 }
@@ -79,7 +88,30 @@ void imageBlurDetection(string &tempDirectory)
         cout << ex.what() << '\n' << endl;
     }
 
-    printf("a = %s",a.c_str());
+    printf("videoURLString = %s", videoURLString.c_str());
+
+    boost::property_tree::ptree postJson;
+    postJson.put("video_path", videoURLString);
+    postJson.add_child("result", array);
+
+    std::stringstream buf;
+    boost::property_tree::write_json(buf, postJson, false);
+    std::string postJsonString = buf.str();
+
+    printf("post json string === > %s", postJsonString.c_str());
+
+    using boost::posix_time::ptime;
+    using boost::posix_time::second_clock;
+    using boost::posix_time::to_simple_string;
+    using boost::gregorian::day_clock;
+
+    ptime todayUtc(day_clock::universal_day(), second_clock::universal_time().time_of_day());
+    string resultFilePath = "./";
+    resultFilePath += to_simple_string(todayUtc);
+    resultFilePath += ".json";
+
+    printf("%s", resultFilePath.c_str());
+    ImageWriter::WriteImageLocal(resultFilePath, postJsonString);
 }
 
 void downloadImages(boost::property_tree::ptree const &pt, string &videoURL)
@@ -139,14 +171,14 @@ int main(int argc, char *argv[])
         printf("参数值=%s\n", argv[i]);
     }
 
-    if(argc != 2)
+    if (argc != 2)
     {
         throw runtime_error("usage : ./ImageBlurDetection http://xxx.mp4");
     }
 
-    string videoURLString(argv[1]);
+    string tempVideoURLString(argv[1]);
 
-    a = videoURLString;
+    videoURLString = tempVideoURLString;
 
     boost::regex urlRegex(urlRegexString);
     if (!boost::regex_match(videoURLString, urlRegex))
